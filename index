@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body style="background:rgb(252, 252, 252);">
+    <p>Transmision</p>
+<video id="video" width="720" controls autoplay muted></video>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+    var video = document.getElementById('video');
+    var url = "https://advertise-star-ecological-surge.trycloudflare.com/hls/stream1.m3u8";
+
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+    }
+</script>
+</body>
+</html>
