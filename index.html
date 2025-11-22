@@ -3,13 +3,14 @@
 <body style="background:rgb(252, 252, 252);">
     <p>Transmisión</p>
     <video id="video" width="720" controls autoplay muted></video>
+    <video id="video2" width="720" controls autoplay muted></video>
+
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        var video = document.getElementById('video');
-        var url = " https://drugs-instant-artists-realistic.trycloudflare.com/hls/stream1.m3u8";
+      function startHls(videoId, url) {
+            var video = document.getElementById(videoId);
 
-        function startHls() {
             if (Hls.isSupported()) {
                 var hls = new Hls();
 
@@ -17,9 +18,9 @@
                 hls.on(Hls.Events.ERROR, function(event, data) {
                     console.warn("HLS error:", data);
                     if (data.fatal) {
-                        console.log("Reconectando...");
+                        console.log("Reconectando " + videoId + "...");
                         hls.destroy();
-                        setTimeout(startHls, 2000); // espera 2 segundos y reconecta
+                        setTimeout(() => startHls(videoId, url), 2000);
                     }
                 });
 
@@ -31,13 +32,17 @@
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = url;
                 video.addEventListener('error', function() {
-                    console.log("Reconectando en navegador nativo...");
+                    console.log("Reconectando " + videoId + " en navegador nativo...");
                     setTimeout(() => { video.src = url; video.play(); }, 2000);
                 });
             }
         }
 
-        startHls();
+        // Cámara 1
+        startHls("video1", "https://drugs-instant-artists-realistic.trycloudflare.com/hls/stream1.m3u8");
+
+        // Cámara 2
+        startHls("video2", "https://drugs-instant-artists-realistic.trycloudflare.com/hls/stream2.m3u8");
     </script>
 </body>
 </html>
